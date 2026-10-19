@@ -11,10 +11,10 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else 'style/twine-style.json'
 C = {
     'bg': '#f7f9fb',          # land, a lighter Mist
     'land2': '#eef3f7',       # residential tint (Mist)
-    'park': '#fcebe7',        # tint of Pastel Peach #f8b0a3
-    'wood': '#f9ded8',
-    'water': '#d5e2ec',       # tint of Light Steel Blue #aac5d8
-    'water_line': '#aac5d8',
+    'park': '#e3ecf2',        # tint of Light Steel Blue #aac5d8
+    'wood': '#d8e4ed',
+    'water': '#fbcfc6',       # tint of Melon Orange #f47d69
+    'water_line': '#f47d69',  # Melon Orange
     'building': '#e8eef3',
     'building_line': '#d8e1e9',
     'road': '#ffffff',
@@ -26,8 +26,8 @@ C = {
     'ink': '#2c2c31',         # Guide Ink
     'text': '#3b3e45',
     'text_soft': '#71757a',   # Sonic Silver
-    'water_text': '#487a9f',  # Steel Blue
-    'park_text': '#a8361f',   # dark Red Orange
+    'water_text': '#a8361f',  # dark Red Orange
+    'park_text': '#285271',   # Slate Blue
     'slate': '#285271',       # Slate Blue
     'halo': '#f7f9fb',
 }
