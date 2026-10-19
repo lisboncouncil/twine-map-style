@@ -1,0 +1,13 @@
+{
+  "title": "TWINE map style for MapLibre GL",
+  "upload_type": "software",
+  "description": "<p>Vector map style for MapLibre GL JS in the visual identity of TWINE (Twin-based Web Interoperable Network for Engagement), a Horizon Europe project. Includes the style, glyphs generated from Raleway and Albert Sans, and a preview page.</p>",
+  "creators": [
+    { "name": "Verona, Marcello", "affiliation": "The Lisbon Council" }
+  ],
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "keywords": ["MapLibre", "map style", "OpenStreetMap", "Local digital twins", "TWINE", "Horizon Europe"],
+  "grants": [{ "id": "10.13039/501100000780::101298722" }],
+  "communities": [{ "identifier": "eu" }]
+}

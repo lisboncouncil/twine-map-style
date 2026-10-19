@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TWINE map style</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<style>
+  :root { --slate:#285271; --steel:#487a9f; --air:#75a0c0; --light-steel:#aac5d8; --red:#df2e10; --melon:#f47d69; --peach:#f8b0a3; --ink:#2c2c31; --mist:#eef3f7; }
+  html, body { margin: 0; height: 100%; font-family: 'Albert Sans', system-ui, sans-serif; color: var(--ink); background: #f7f9fb; }
+  #map { position: absolute; inset: 0; }
+  .panel { position: absolute; left: 16px; top: 16px; z-index: 2; background: #fff; border: 1px solid var(--ink); padding: 14px; display: flex; flex-direction: column; gap: 8px; max-width: 240px; }
+  .panel h1 { margin: 0 0 4px; font: 800 18px 'Raleway', sans-serif; color: var(--slate); }
+  .panel button { font: 600 15px 'Albert Sans', sans-serif; color: var(--ink); text-align: left; border: 1px solid var(--ink); background: #fff; padding: 8px 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .panel button:hover { background: var(--mist); }
+  .panel button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .panel button:focus-visible, .station:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--ink); box-sizing: border-box; flex-shrink: 0; }
+  .station { width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 1px 4px rgba(44,44,49,.35); box-sizing: border-box; cursor: pointer; }
+  .station.event { width: 36px; height: 36px; border-width: 5px; box-shadow: 0 0 0 6px rgba(223,46,16,.18), 0 1px 4px rgba(44,44,49,.35); }
+  .maplibregl-popup-content { border-radius: 0; font: 15px 'Albert Sans', sans-serif; padding: 12px 14px; }
+  .maplibregl-popup-content b { font: 800 17px 'Raleway', sans-serif; color: var(--slate); display: block; }
+</style>
+</head>
+<body>
+<div id="map" role="region" aria-label="Map of the TWINE pilot sites"></div>
+<nav class="panel" aria-label="Map views">
+  <h1>TWINE map</h1>
+  <button type="button" data-view="europe" aria-pressed="true"><span class="dot" style="background: var(--ink)"></span>All pilots</button>
+  <button type="button" data-view="rotterdam"><span class="dot" style="background: var(--slate)"></span>Rotterdam</button>
+  <button type="button" data-view="tampere"><span class="dot" style="background: var(--slate)"></span>Tampere</button>
+  <button type="button" data-view="flanders"><span class="dot" style="background: var(--slate)"></span>Flanders</button>
+  <button type="button" data-view="brussels"><span class="dot" style="background: var(--red)"></span>Event in Brussels</button>
+  <p style="margin: 6px 0 0; font-size: 13px; line-height: 1.4;"><a href="https://github.com/lisboncouncil/twine-map-style" style="color: var(--steel);">Source and licence</a> · style CC BY 4.0, The Lisbon Council 2026</p>
+</nav>
+<script>
+  // Approximate coordinates (city centres; the Flanders pilot is regional), to be replaced with the exact pilot locations.
+  const PLACES = {
+    rotterdam: { name: 'Rotterdam', sub: 'Rotterdam pilot, Gemeente Rotterdam', ll: [4.4777, 51.9244], color: '#285271', z: 13 },
+    tampere:   { name: 'Tampere', sub: 'Tampere pilot, City of Tampere', ll: [23.7610, 61.4978], color: '#285271', z: 13 },
+    flanders:  { name: 'Flanders', sub: 'Flanders pilot, Flemish Region', ll: [4.2, 51.0], color: '#285271', z: 8 },
+    brussels:  { name: '[Event venue]', sub: '[Street, Brussels]', ll: [4.3786, 50.8433], color: '#df2e10', z: 15.5, event: true }
+  };
+  const EUROPE = { center: [14, 56], zoom: 3.6 };
+  const params = new URLSearchParams(location.search);
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: params.get('style') || 'twine-style.json',
+    ...EUROPE, attributionControl: { compact: false }
+  });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+  Object.entries(PLACES).forEach(([key, p]) => {
+    const el = document.createElement('button');
+    el.className = 'station' + (p.event ? ' event' : '');
+    el.style.background = p.color;
+    el.setAttribute('aria-label', p.name);
+    new maplibregl.Marker({ element: el }).setLngLat(p.ll)
+      .setPopup(new maplibregl.Popup({ offset: 20 }).setHTML(`<b>${p.name}</b>${p.sub}`)).addTo(map);
+  });
+  const go = (view, animate = true) => {
+    document.querySelectorAll('.panel button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === view));
+    const opts = view === 'europe' ? EUROPE : { center: PLACES[view].ll, zoom: PLACES[view].z };
+    animate ? map.flyTo({ ...opts, speed: 1.4 }) : map.jumpTo(opts);
+  };
+  document.querySelectorAll('.panel button').forEach(b => b.addEventListener('click', () => go(b.dataset.view)));
+  if (params.get('view')) map.once('load', () => go(params.get('view'), false));
+  if (params.get('nopanel')) document.querySelector('.panel').style.display = 'none';
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this map style, please cite it as below."
+title: "TWINE map style for MapLibre GL"
+type: software
+version: 1.0.0
+date-released: 2026-10-20
+license: CC-BY-4.0
+repository-code: "https://github.com/lisboncouncil/twine-map-style"
+url: "https://lisboncouncil.github.io/twine-map-style/"
+authors:
+  - family-names: Verona
+    given-names: Marcello
+    affiliation: The Lisbon Council
+  - name: The Lisbon Council
+keywords:
+  - MapLibre
+  - map style
+  - OpenStreetMap
+  - Local digital twins
+  - TWINE
+  - Horizon Europe
+abstract: >-
+  Vector map style for MapLibre GL JS in the visual identity of TWINE
+  (Twin-based Web Interoperable Network for Engagement), a Horizon Europe
+  project, Grant Agreement No. 101298722.
